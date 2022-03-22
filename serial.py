@@ -17,23 +17,20 @@ class SerialGenerator:
     >>> serial.generate()
     100
     """
-    def __init__(self, serial_start):
-        """accepts starting serial number"""
-        self.serial_start = serial_start
-        self.running_serial = 0
-        self.counter = 0
 
+    def __init__(self, serial_start=0):
+        """accepts starting serial number"""
+        self.start = serial_start
+        self.next = serial_start
 
     def __repr__(self):
-        return f"<SerialGenerator serial_start = {self.serial_start}>"
+        return f"<SerialGenerator start = {self.start} next = {self.next}>"
 
     def generate(self):
         """Increment running serial number"""
-        self.running_serial = self.serial_start + self.counter
-        self.counter += 1
-        return self.running_serial
+        self.next += 1
+        return self.next - 1
 
     def reset(self):
         """Reset running serial number to starting serial number"""
-        self.running_serial = self.serial_start
-        self.counter = 0
+        self.next = self.start
