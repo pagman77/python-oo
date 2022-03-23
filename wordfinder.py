@@ -18,15 +18,17 @@ class WordFinder:
         file = open(self.path)
         word_list = []
         for line in file:
+            # word_list.append(line.strip()) would work to take out line breaks
             word_list.append(line)
         return word_list
 
-    def print_word(self):
+    def print_word(self):           # rename this function name to maybe print num of words?
         """Print word count to console"""
         print(f"{len(self.words)} words read")
 
     def random(self):
         """Return random word from word list"""
+        # random.choice also gives random selection from list
         random_word = sample(self.words, k=1)[0]
         if random_word.endswith("\n"):
             return random_word[:len(random_word)-1]
@@ -36,8 +38,9 @@ class WordFinder:
 class SpecialWordFinder(WordFinder):
     """SpecialWordFinder: finds random words from file with blank lines"""
 
-    def __init__(self, path):
-        super().__init__(path)
+    # init is not needed because we're not adding any more parameters than what is already in the parent class
+    # def __init__(self, path):
+    #     super().__init__(path)
 
     def special_word_list(self):
         """return word list without blanks or lines that start with #"""
