@@ -1,4 +1,4 @@
-from random import sample
+from random import choice
 
 
 class WordFinder:
@@ -6,53 +6,28 @@ class WordFinder:
 
     def __init__(self, path):
         """Create word finder from file path"""
-        self.path = path
-        self.words = self.read_file()
-        self.print_word()
+        file = open(path)
+
+        self.words = self.parse(file)
+
+        print(f"{len(self.words)} words read")
 
     def __repr__(self):
-        return f"<Word Finder path = {self.path}>"
+        return f"<{self.__class__.__name__} len(words={len(self.words)})>"
 
-    def read_file(self):
-        """Read file and return word list"""
-        file = open(self.path)
-        word_list = []
-        for line in file:
-            # word_list.append(line.strip()) would work to take out line breaks
-            word_list.append(line)
-        return word_list
-
-    def print_word(self):           # rename this function name to maybe print num of words?
-        """Print word count to console"""
-        print(f"{len(self.words)} words read")
+    def parse(self, file):
+        """parse file into list of words"""
+        return [line.strip() for line in file]
 
     def random(self):
         """Return random word from word list"""
-        # random.choice also gives random selection from list
-        random_word = sample(self.words, k=1)[0]
-        if random_word.endswith("\n"):
-            return random_word[:len(random_word)-1]
-        return random_word
+        return random.choice(self.words)
 
 
 class SpecialWordFinder(WordFinder):
     """SpecialWordFinder: finds random words from file with blank lines"""
 
-    # init is not needed because we're not adding any more parameters than what is already in the parent class
-    # def __init__(self, path):
-    #     super().__init__(path)
-
-    def special_word_list(self):
-        """return word list without blanks or lines that start with #"""
-        return [line for line in self.words if line[0].isalpha()]
-
-    def special_random(self):
-        """Return random word from special word list"""
-        random_word = sample(self.special_word_list(), k=1)[0]
-        if random_word.endswith("\n"):
-            return random_word[:len(random_word)-1]
-        return random_word
-
-    def print_word(self):
-        """Print special word count to console"""
-        print(f"{len(self.special_word_list())} words read")
+    def parse(self, file):
+        """parse file to list of words, skip blanks/comments"""
+        return [word for word in super().parse(file)
+                if word != "" and not word.startswith("#")]
